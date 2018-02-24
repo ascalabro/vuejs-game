@@ -2,11 +2,52 @@
 <html>
   <head>
 	<script src="https://unpkg.com/vue@2.5.13/dist/vue.min.js"></script>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+      <link href="/css/main.css" rel="stylesheet" type="text/css">
   </head>
   <body>
+  <div class="container">
+  <h2>Welcome to the Vue.js tic-tac-toe game</h2>
     <div id="app">
-      <p>{{ message }}</p>
+        <scoreboard></scoreboard>
+        <gameboard></gameboard>
+        <statuscontrols></statuscontrols>
     </div>
-	<script src="js/app.js" ></script>
+  </div>
+<script type="text/x-template" id="gameboard-template">
+  <div class="gameboard-grid">
+      <div class="gameboard-row">
+          <div class="col-md-4 gameboard-cell">X</div>
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+      </div>
+      <div class="gameboard-row">
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+          <div class="col-md-4 gameboard-cell">O</div>
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+      </div>
+      <div class="gameboard-row">
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+          <div class="col-md-4 gameboard-cell">&nbsp;</div>
+      </div>
+  </div>
+</script>
+
+<script type="text/x-template" id="scoreboard-template">
+  <ul class="list-group">
+      <li class="list-group-item justify-content-between">
+          The best named player
+          <span class="badge badge-default badge-pill">14</span>
+      </li>
+  </ul>
+</script>
+
+<script type="text/x-template" id="statuscontrols-template">
+    <h5>Current player is <span class="badge badge-default">currentPlayer</span></h5>
+</script>
+
+  <script src="js/app.js" ></script>
+
   </body>
 </html>

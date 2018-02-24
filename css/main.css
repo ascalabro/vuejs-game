@@ -1,0 +1,25 @@
+
+.gameboard-grid{
+    display: table;
+    margin: 0 auto;
+    background-color: #fff6f6;
+    width: 50%;
+    margin-top: 1em;
+}
+.gameboard-row {
+    display: table-row;
+    height: 79px;
+}
+.gameboard-cell {
+    border: 1px solid #999999;
+    display: table-cell;
+    padding: 3px 10px;
+    cursor: pointer;
+    text-align: center;
+    padding: 27px;
+    min-width: 48px;
+    font-size: 2em;
+}
+.row-container {
+    display: table-row-group;
+}
