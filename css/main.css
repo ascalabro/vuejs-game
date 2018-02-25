@@ -11,6 +11,7 @@
     height: 79px;
 }
 .gameboard-cell {
+    min-height: 96px;
     border: 1px solid #999999;
     display: table-cell;
     padding: 3px 10px;
