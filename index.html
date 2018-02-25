@@ -9,9 +9,11 @@
   <div class="container">
   <h2>A Vue.js tic-tac-toe game</h2>
     <div id="app">
-        <scoreboard ref="scoreboard"></scoreboard>
+        <div class="row">
+            <scoreboard ref="scoreboard"></scoreboard>
+            <statuscontrols ref="statuscontrols"></statuscontrols>
+        </div>
         <gameboard ref="gameboard"></gameboard>
-        <statuscontrols ref="statuscontrols"></statuscontrols>
     </div>
   </div>
 
@@ -37,16 +39,20 @@
     </script>
 
     <script type="text/x-template" id="scoreboard-template">
-      <ul class="list-group">
-          <li class="list-group-item justify-content-between">
-              The best named player
-              <span class="badge badge-default badge-pill">14</span>
-          </li>
-      </ul>
+        <div class="col-md-3">
+            <h3>Current win counts</h3>
+            <ul class="list-group">
+                <li class="list-group-item justify-content-between" v-for="player in getScores()">
+                    {{player.player}}<span class="badge badge-default badge-pill">{{player.score}}</span>
+                </li>
+            </ul>
+        </div>
     </script>
 
     <script type="text/x-template" id="statuscontrols-template">
-        <h3>Player's turn: <span class="badge badge-default">{{getActivePlayer()}}</span></h3>
+        <div class="col-md-6">
+            <h3 v-show="gameIsActive()">Player {{getActivePlayer()}}'s turn</h3>
+        </div>
     </script>
 
   <!-- main app js file -->

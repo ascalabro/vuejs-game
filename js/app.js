@@ -7,27 +7,27 @@ Vue.component('gameboard', {
     data: {},
     methods: {
         playAttempt: function (event) {
+            if (!this.$root.$data.gameIsActive) {
+                return; // Game is already finished
+            }
             var cellValue = event.target.innerHTML,
                 cellId = event.target.getAttribute('cell-id');
-            if (cellValue == '') { // Empty cell
-                console.log('The cell was empty...' + cellValue);
+            if (cellValue == '') { // The user clicked on an empty cell
+                console.log('The cell ' + cellId + ' was empty, making move');
                 currentPlayerToken = this.$root.$data.store.currentPlayer;
                 event.target.innerHTML = currentPlayerToken; // Put the player token into the grid
                 this.$root.$data.store.playerPositions[currentPlayerToken].push(cellId); // Keep track of which cells the player occupies
                 this.alternatePlayerTurn(); // Only alternate player if a move was made
             } else { // Not empty, player already moved here
-                console.log('The cell was NOT empty: ' + cellValue);
+                console.log('The cell was NOT empty. It contains ' + cellValue);
                 return; // Do nothing
             }
             var currentPlayerPositions = this.$root.$data.store.playerPositions[currentPlayerToken];
             if (this.isWinner(currentPlayerPositions)) {
+                this.$root.$data.gameIsActive = false;
+                this.$root.$refs.scoreboard.addToScore(currentPlayerToken);
+                this.$forceUpdate(); // TODO: Do something to update the scores as they are on the page, so user doesn't have to refresh browser
                 alert('Player ' + currentPlayerToken + " has won this game");
-            }
-
-            // `this` inside methods points to the Vue instance
-            // `event` is the native DOM event
-            if (event) {
-                // alert(event.target.innerHTML)
             }
         },
         alternatePlayerTurn() {
@@ -48,6 +48,7 @@ Vue.component('gameboard', {
 
     }
 });
+// END Gameboard component
 
 
 /**
@@ -56,33 +57,52 @@ Vue.component('gameboard', {
 Vue.component('scoreboard', {
     template: '#scoreboard-template', //TODO: Loop through players' names and display their names and scores here in the list-
     methods: {
-        getBestScore() {
-            return localStorage.getItem("localHighScore");
+        getScores() {
+            var scores = [],
+                playerTokens = this.$root.$data.store.playerTokens;
+            for(var i = 0; i < playerTokens.length; i++) {
+                var player = playerTokens[i];
+                var scoreObj = {};
+                scoreObj['player'] = player;
+                scoreObj['score'] = localStorage.getItem("score-" + player);
+                scores.push(scoreObj);
+            }
+            console.log(scores);
+            return scores;
         },
-        setBestScore(score) {
-            localStorage.setItem("localHighScore", score);
+        addToScore(player) {
+            var currentScore = localStorage.getItem("score-" + player) || 0;
+            localStorage.setItem("score-" + player, parseInt(++currentScore));
+            console.log("score was added for player " + player + ": " + localStorage.getItem("score-" + player));
         }
     }
 });
+// END Scoreboard component
+
 
 /**
- * Register StatusControls component globally
+ * Register Statuscontrols component globally
  */
 Vue.component('statuscontrols', {
     template: '#statuscontrols-template',
     methods: {
         getActivePlayer() {
             return this.$root.$data.store.currentPlayer;
+        },
+        gameIsActive() {
+            return this.$root.$data.gameIsActive;
         }
     }
 });
+// END Statuscontrols component
+
 
 // Shared data
 let store = {
     playerTokens: [
         'X', 'O'
     ],
-    currentPlayer: 'X',
+    currentPlayer: 'X', // TODO: Randmoize starting player
     playerPositions: {
         'X': [],
         'O': [],
@@ -99,6 +119,7 @@ var vm = new Vue({
     el: '#app',
     data: { // get this with this.$root.$data.message
         message: 'This is a $root var called `message`...',
-        store: store
+        store: store,
+        gameIsActive: true
     }
 });
